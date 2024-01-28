@@ -6,13 +6,46 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
+  provider = "mysql"
   url      = env("DATABASE_URL")
 }
 
 model User {
   id    Int     @default(autoincrement()) @id
   email String  @unique
-  name  String?
-  posts Post[]
+  first_name  String?
+  last_name  String?
+  title  String?
+  business_name  String?
+  legal_business_name  String?
+  role Role @default(USER)
+  account_type AccountType @default(INDIVIDUAL)
+  account_mode AccountMode @default(GUEST)
+  logo String?
+  password String
+  is_active Boolean @default(true)
+  is_deleted Boolean @default(false)
+}
+model TokenVerification {
+  id Int @default(autoincrement()) @id
+  email String
+  token_for TokenFor 
+}
+
+enum Role {
+  ADMIN
+  USER
+}
+
+enum AccountType {
+  BUSINESS
+  INDIVIDUAL
+}
+enum AccountMode {
+  GUEST
+  REGISTERED
+}
+enum TokenFor {
+  EMAIL_VERIFICATION
+  PASSWORD_RESET
 }
